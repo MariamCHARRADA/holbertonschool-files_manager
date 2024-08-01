@@ -1,5 +1,5 @@
-import { createClient } from "redis";
-import { promisify } from "util";
+import { createClient } from 'redis';
+import { promisify } from 'util';
 
 class RedisClient {
   constructor() {
@@ -10,12 +10,12 @@ class RedisClient {
     this.setexAsync = promisify(this.client.setex).bind(this.client);
     this.delAsync = promisify(this.client.del).bind(this.client);
 
-    this.client.on("error", (err) => {
+    this.client.on('error', (err) => {
       console.log(err);
       this.isConnected = false;
     });
 
-    this.client.on("ready", () => {
+    this.client.on('ready', () => {
       this.isConnected = true;
     });
   }
