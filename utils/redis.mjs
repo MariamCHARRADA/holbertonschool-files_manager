@@ -25,15 +25,15 @@ class RedisClient {
   }
 
   async get(key) {
-    return await this.getAsync(key);
+    return this.getAsync(key);
   }
 
   async del(key) {
-    return await this.delAsync(key);
+    return this.delAsync(key);
   }
 
   async set(key, value, duration) {
-    return await this.setexAsync(key, value, duration);
+    return this.setexAsync(key, value, duration);
   }
 }
 
