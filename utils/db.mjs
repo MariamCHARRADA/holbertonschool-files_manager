@@ -1,29 +1,24 @@
-
-import mongodb from "mongodb";
-import { MongoClient } from 'mongodb';
+import mongodb, { MongoClient } from 'mongodb';
 
 class DBClient {
   constructor() {
-    const host = process.env.DB_HOST || "localhost";
+    const host = process.env.DB_HOST || 'localhost';
     const port = process.env.DB_PORT || 27017;
-    const database = process.env.DB_DATABASE || "files_manager";
+    const database = process.env.DB_DATABASE || 'files_manager';
     this.isConnected = false;
-
-
   }
 
   isAlive() {
     return this.isConnected;
   }
 
-  async nbUsers(key) {
+  async nbUsers() {
 
   }
 
-  async nbFiles(key) {
+  async nbFiles() {
 
-}
-
+  }
 }
 
 const dbClient = new DBClient();
