@@ -27,10 +27,20 @@ class DBClient {
   }
 
   async nbUsers() {
+    if (!this.isConnected) {
+      await this.client.connect();
+      this.db = this.client.db(this.databaseName);
+      this.isConnected = true;
+    }
     return this.db.collection('users').countDocuments();
   }
 
   async nbFiles() {
+    if (!this.isConnected) {
+      await this.client.connect();
+      this.db = this.client.db(this.databaseName);
+      this.isConnected = true;
+    }
     return this.db.collection('files').countDocuments();
   }
 }
