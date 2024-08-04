@@ -1,4 +1,4 @@
-import mongodb, { MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 class DBClient {
   constructor() {
@@ -6,9 +6,20 @@ class DBClient {
     const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
 
-    const url = `mongodb://${DB_HOST}:${DB_PORT}`;
-    
+    this.url = `mongodb://${host}:${port}`;
+    this.databaseName = database;
+    this.client = new MongoClient(this.url, { useNewUrlParser: true, useUnifiedTopology: true });
     this.isConnected = false;
+
+    this.client.connect()
+      .then(() => {
+        this.db = this.client.db(this.databaseName);
+        this.isConnected = true;
+      })
+      .catch((error) => {
+        console.error('failed to connect', error);
+        this.isConnected = false;
+      });
   }
 
   isAlive() {
@@ -16,11 +27,11 @@ class DBClient {
   }
 
   async nbUsers() {
-
+    return this.db.collection('users').count();
   }
 
   async nbFiles() {
-
+    return this.db.collection('files').count();
   }
 }
 
