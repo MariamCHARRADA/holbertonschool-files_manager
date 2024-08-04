@@ -1,23 +1,27 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 class DBClient {
   constructor() {
-    const host = process.env.DB_HOST || 'localhost';
+    const host = process.env.DB_HOST || "localhost";
     const port = process.env.DB_PORT || 27017;
-    const database = process.env.DB_DATABASE || 'files_manager';
+    const database = process.env.DB_DATABASE || "files_manager";
 
     this.url = `mongodb://${host}:${port}`;
     this.databaseName = database;
-    this.client = new MongoClient(this.url, { useNewUrlParser: true, useUnifiedTopology: true });
+    this.client = new MongoClient(this.url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     this.isConnected = false;
 
-    this.client.connect()
+    this.client
+      .connect()
       .then(() => {
         this.db = this.client.db(this.databaseName);
         this.isConnected = true;
       })
       .catch((error) => {
-        console.error('failed to connect', error);
+        console.error("failed to connect", error);
         this.isConnected = false;
       });
   }
@@ -28,20 +32,40 @@ class DBClient {
 
   async nbUsers() {
     if (!this.isConnected) {
-      await this.client.connect();
-      this.db = this.client.db(this.databaseName);
-      this.isConnected = true;
+      try {
+        await this.client.connect();
+        this.db = this.client.db(this.databaseName);
+        this.isConnected = true;
+      } catch (error) {
+        console.error("", error);
+        this.isConnected = false;
+        throw error;
+      }
+      try {
+        return await this.db.collection("users").countDocuments();
+      } catch (error) {
+        throw error;
+      }
     }
-    return this.db.collection('users').countDocuments();
   }
 
   async nbFiles() {
     if (!this.isConnected) {
-      await this.client.connect();
-      this.db = this.client.db(this.databaseName);
-      this.isConnected = true;
+      try {
+        await this.client.connect();
+        this.db = this.client.db(this.databaseName);
+        this.isConnected = true;
+      } catch (error) {
+        console.error("", error);
+        this.isConnected = false;
+        throw error;
+      }
+      try {
+        return await this.db.collection("files").countDocuments();
+      } catch (error) {
+        throw error;
+      }
     }
-    return this.db.collection('files').countDocuments();
   }
 }
 
