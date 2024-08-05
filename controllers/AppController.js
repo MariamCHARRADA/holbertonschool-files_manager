@@ -2,14 +2,14 @@ import redisClient from '../utils/redis';
 import dbClient from '../utils/db';
 
 const AppController = {
-  async getStatus(req, res) {
+  getStatus(req, res) {
     return res.status(200).json({
       redis: redisClient.isAlive(),
       db: dbClient.isAlive(),
     });
   },
 
-  async getStats(req, res) {
+  getStats(req, res) {
     Promise.all([dbClient.nbUsers(), dbClient.nbFiles()]).then(
       ([users, files]) => {
         res.status(200).json({ Users: users, Files: files });
