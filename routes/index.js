@@ -1,11 +1,11 @@
-import express from 'express';
-import { getStats, getStatus } from "../controllers/AppController.mjs";
-import { postNew } from "../controllers/UsersController.mjs";
+import { Router } from "express";
+import AppController from "../controllers/AppController";
+import { postNew } from "../controllers/UsersController";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/status", getStatus);
-router.get("/stats", getStats);
+router.get("/status", AppController.getStatus);
+router.get("/stats", AppController.getStats);
 router.post("/users", postNew);
 
 export default router;
