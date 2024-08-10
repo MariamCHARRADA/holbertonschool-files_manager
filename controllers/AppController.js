@@ -1,5 +1,5 @@
-import redisClient from "../utils/redis";
-import dbClient from "../utils/db";
+import redisClient from '../utils/redis';
+import dbClient from '../utils/db';
 
 export default class AppController {
   static getStatus(req, res) {
@@ -13,9 +13,6 @@ export default class AppController {
     Promise.all([dbClient.nbUsers(), dbClient.nbFiles()])
       .then(([users, files]) => {
         res.status(200).json({ Users: users, Files: files });
-      })
-      .catch((error) => {
-        res.status(500).json({ error: "Failed to retrieve stats" });
       });
   }
 }
