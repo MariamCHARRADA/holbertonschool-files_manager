@@ -1,5 +1,5 @@
-import redisClient from '../utils/redis';
-import dbClient from '../utils/db';
+import redisClient from "../utils/redis";
+import dbClient from "../utils/db";
 
 const AppController = {
   getStatus(req, res) {
@@ -9,12 +9,17 @@ const AppController = {
     });
   },
 
-  getStats(req, res) {
-    Promise.all([dbClient.nbUsers(), dbClient.nbFiles()]).then(
-      ([users, files]) => {
-        res.status(200).json({ Users: users, Files: files });
-      },
-    );
+  async getStats(req, res) {
+    try {
+      const [users, files] = await Promise.all([
+        dbClient.nbUsers(),
+        dbClient.nbFiles(),
+      ]);
+
+      res.status(200).json({ Users: users, Files: files });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve stats" });
+    }
   },
 };
 
